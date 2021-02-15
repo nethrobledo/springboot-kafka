@@ -9,7 +9,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Component
-class KafkaSender{
+class KafkaProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
@@ -17,7 +17,7 @@ class KafkaSender{
     private String topicName;
 
     @Autowired
-    KafkaSender(KafkaTemplate<String, String> kafkaTemplate) {
+    KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -39,5 +39,10 @@ class KafkaSender{
                         + message + "] due to : " + ex.getMessage());
             }
         });
+    }
+
+    public void send(String topic, String payload) {
+        System.out.println("sending payload='{}' to topic='{}'" + payload + topic);
+        kafkaTemplate.send(topic, payload);
     }
 }
